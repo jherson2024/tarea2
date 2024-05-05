@@ -1,0 +1,34 @@
+// funcion para agragar nueva tarea
+function addTarea(tarea,plataforma,fecha,estado){
+  let doc=DocumentApp.getActiveDocument();
+  let body=doc.getBody();
+  body.appendParagraph("Tarea: "+tarea);
+  body.appendParagraph("Plataforma: "+plataforma);
+  body.appendParagraph("Fecha de vencimiento: "+fecha);
+  body.appendParagraph("Estado: "+estado);
+  body.appendParagraph('--------------------------------------------------');
+}
+
+// funcion para agragar las tareas que ya estaban escritas
+function addTareas(){
+  let doc=DocumentApp.getActiveDocument();
+  let body=doc.getBody();
+  let contenido=body.getParagraphs();
+  let lista=[];
+  let tarea={};
+  contenido.forEach(function(area){
+    let text=area.getText();
+    if(text.startsWith("Tarea: ")){
+      tarea.title=text.substring(8);
+    } else if(text.startsWith("Plataforma: ")){
+      tarea.description=text.substring(13);
+    } else if(text.startsWith("Fecha de vencimiento: ")){
+      tarea.dueDate=text.substring(23);
+    } else if(text.startsWith("Estado: ")){
+      tarea.status=text.substring(8);
+      lista.push(tarea);
+      tarea={};
+    }
+  });
+  return lista;
+}
